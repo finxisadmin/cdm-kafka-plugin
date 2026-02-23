@@ -1,0 +1,17 @@
+namespace cdm.plugin.kafka : <"Kafka plugin namespace for inclusion of messaging functions in the CDM.">
+version "${project.version}"
+
+enum KafkaAcksEnum: <"Kafka producer acknowledgement modes.">
+    None <"No acknowledgement (fire and forget).">
+    Leader <"Leader acknowledgement only.">
+    All <"Full ISR acknowledgement.">
+
+enum KafkaOffsetResetEnum: <"Consumer offset reset strategy when no committed offset exists.">
+    Earliest <"Start from the beginning of the topic.">
+    Latest <"Start from the end of the topic.">
+    None <"Throw an error if no offset found.">
+
+enum KafkaDeliveryStatusEnum: <"Status of a message delivery to Kafka.">
+    Delivered <"Message successfully written and acknowledged.">
+    Failed <"Message delivery failed.">
+    Pending <"Message sent but not yet acknowledged.">

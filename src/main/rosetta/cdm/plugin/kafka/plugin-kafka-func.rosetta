@@ -1,0 +1,24 @@
+namespace cdm.plugin.kafka : <"Kafka plugin namespace for inclusion of messaging functions in the CDM.">
+version "${project.version}"
+
+func KafkaPublish: <"Publish a CDM event as JSON to a Kafka topic. Returns delivery confirmation including partition and offset.">
+    inputs:
+        kafkaPayload string (1..1) <"CDM event serialized as JSON.">
+        kafkaTopicConfig KafkaTopicConfig (1..1)
+    output:
+        kafkaResult KafkaDeliveryResult (1..1)
+
+func KafkaPublishKeyed: <"Publish a CDM event with an explicit partition key. Use trade identifiers or entity LEIs as keys for ordering guarantees.">
+    inputs:
+        kafkaPayload string (1..1) <"CDM event serialized as JSON.">
+        kafkaKey string (1..1) <"Partition key for message ordering.">
+        kafkaTopicConfig KafkaTopicConfig (1..1)
+    output:
+        kafkaResult KafkaDeliveryResult (1..1)
+
+func KafkaConsume: <"Poll for the next batch of messages from subscribed Kafka topics. Returns available messages or an empty list if none are ready.">
+    inputs:
+        kafkaSubscription KafkaSubscription (1..1)
+        kafkaPollTimeoutMs int (0..1) <"Poll timeout in milliseconds. Defaults to 500.">
+    output:
+        kafkaMessages KafkaMessage (0..*)

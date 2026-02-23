@@ -1,0 +1,33 @@
+namespace cdm.plugin.kafka : <"Kafka plugin namespace for inclusion of messaging functions in the CDM.">
+version "${project.version}"
+
+type KafkaHeader: <"A single Kafka message header key-value pair.">
+    kafkaHeaderName string (1..1)
+    kafkaHeaderValue string (1..1)
+
+type KafkaTopicConfig: <"Configuration for a Kafka topic.">
+    kafkaTopic string (1..1) <"Topic name, e.g. cdm.lifecycle.events.">
+    kafkaPartitionKey string (0..1) <"Optional key for message partitioning.">
+    kafkaHeaders KafkaHeader (0..*)
+
+type KafkaDeliveryResult: <"Result of publishing a message to Kafka.">
+    kafkaStatus KafkaDeliveryStatusEnum (1..1)
+    kafkaTopic string (1..1) <"Topic the message was published to.">
+    kafkaPartition int (0..1) <"Partition the message was written to.">
+    kafkaOffset int (0..1) <"Offset assigned to the message.">
+    kafkaTimestamp int (0..1) <"Broker timestamp in epoch milliseconds.">
+    kafkaError string (0..1) <"Error message if delivery failed.">
+
+type KafkaMessage: <"A message received from a Kafka topic.">
+    kafkaTopic string (1..1)
+    kafkaPartition int (1..1)
+    kafkaOffset int (1..1)
+    kafkaKey string (0..1)
+    kafkaPayload string (1..1) <"Message value, typically CDM JSON.">
+    kafkaHeaders KafkaHeader (0..*)
+    kafkaTimestamp int (0..1)
+
+type KafkaSubscription: <"Configuration for subscribing to Kafka topics.">
+    kafkaTopics string (1..*) <"One or more topic names to subscribe to.">
+    kafkaGroupId string (1..1) <"Consumer group identifier.">
+    kafkaOffsetReset KafkaOffsetResetEnum (0..1) <"Offset reset strategy. Defaults to Earliest.">
